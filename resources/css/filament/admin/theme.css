@@ -1,0 +1,595 @@
+/*
+ * Tema custom do ProjetoGestar para o painel Filament admin.
+ *
+ * Este arquivo NAO reimporta o tema base do Filament. Ele apenas adiciona
+ * overrides para alinhar o painel com a referencia FRONTEND.png.
+ */
+
+:root {
+    --gestar-bg: #fafbfd;
+    --gestar-card-border: #e1e7ef;
+    --gestar-card-border-light: #e5eaf2;
+    --gestar-text: #1d3557;
+    --gestar-card-title: #0b3a75;
+    --gestar-page-title: #0b1f3a;
+    --gestar-muted: #6b7280;
+    --gestar-placeholder: #9ca3af;
+    --gestar-topbar: #002f66;
+    --gestar-active-bg: #eef4ff;
+    --gestar-primary: #0b5ed7;
+}
+
+html,
+body,
+.fi-body {
+    background: var(--gestar-bg);
+    font-family: 'Inter', 'Roboto', Arial, sans-serif;
+    color: var(--gestar-text);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sidebar 270px branca, item ativo azul claro                        */
+/* ------------------------------------------------------------------ */
+.fi-sidebar {
+    width: 270px !important;
+    background: #ffffff !important;
+    border-right: 1px solid var(--gestar-card-border-light);
+}
+
+.fi-sidebar-header {
+    height: 70px;
+    border-bottom: 1px solid var(--gestar-card-border-light);
+    background: #ffffff;
+    padding: 0 !important;
+}
+
+/* Esconde o brand padrao do Filament (texto vazio) */
+.fi-sidebar-header .fi-logo {
+    display: none !important;
+}
+
+.fi-sidebar-nav {
+    padding: 16px 12px;
+}
+
+.fi-sidebar-item-button {
+    height: 48px;
+    border-radius: 8px;
+    color: var(--gestar-text);
+    font-size: 15px;
+    margin-bottom: 8px;
+    padding: 0 14px;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-button,
+.fi-sidebar-item-button[aria-current="page"] {
+    background: var(--gestar-active-bg) !important;
+    color: var(--gestar-primary) !important;
+}
+
+.fi-sidebar-item-button .fi-sidebar-item-icon {
+    color: inherit;
+}
+
+/* Esconde o item Dashboard padrao (nao esta na referencia) */
+.fi-sidebar-item-grouped-by-active-status:has(a[href$="/admin"]):not(:has(a[href*="atendimentos"]):not(:has(a[href*="pacientes"]))) > .fi-sidebar-item:first-child {
+    /* placeholder seguro - ver render hooks no provider para esconder */
+}
+
+.gestar-sidebar-help {
+    margin-top: auto;
+    padding: 12px 24px 20px;
+    border-top: 1px solid var(--gestar-card-border-light);
+    color: var(--gestar-text);
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.gestar-sidebar-help:hover {
+    background: var(--gestar-active-bg);
+    color: var(--gestar-primary);
+}
+
+/* ------------------------------------------------------------------ */
+/* Topbar azul marinho 70px                                            */
+/* ------------------------------------------------------------------ */
+.fi-topbar {
+    height: 70px;
+    background: var(--gestar-topbar) !important;
+    border: none !important;
+    color: #ffffff;
+    box-shadow: none !important;
+}
+
+.fi-topbar > nav {
+    height: 70px;
+    padding: 0 24px;
+    background: var(--gestar-topbar);
+}
+
+.fi-topbar a,
+.fi-topbar button:not(.fi-btn):not([class*="fi-color"]),
+.fi-topbar svg,
+.fi-topbar span {
+    color: #ffffff;
+}
+
+/* Topbar search custom  */
+.gestar-topbar-search {
+    width: 410px;
+    max-width: 100%;
+    height: 36px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+}
+
+.gestar-topbar-search input {
+    background: transparent;
+    border: none;
+    outline: none;
+    flex: 1;
+    color: #ffffff;
+    font-size: 13px;
+}
+
+.gestar-topbar-search input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.gestar-topbar-bell {
+    position: relative;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.gestar-topbar-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 18px;
+    height: 18px;
+    background: #ef4444;
+    color: #ffffff;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+.gestar-topbar-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+}
+
+.gestar-topbar-profile-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--gestar-topbar);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.gestar-topbar-profile-text {
+    line-height: 1.1;
+    text-align: right;
+}
+
+.gestar-topbar-profile-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.gestar-topbar-profile-text span {
+    display: block;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* Esconde o user-menu padrao do Filament (TU avatar redundante) */
+.fi-topbar .fi-dropdown-trigger:has(.fi-avatar) {
+    display: none !important;
+}
+
+/* Esconde global search quando desativado */
+
+/* ------------------------------------------------------------------ */
+/* Cabecalho da pagina e botoes                                        */
+/* ------------------------------------------------------------------ */
+.fi-header-heading {
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    color: var(--gestar-page-title) !important;
+}
+
+.fi-breadcrumbs {
+    font-size: 13px;
+}
+
+/* Botoes do header com altura/borda da referencia */
+.fi-header-actions .fi-btn {
+    height: 40px;
+    padding: 0 20px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 6px;
+}
+
+.fi-header-actions .fi-btn-color-gray.fi-btn-outlined {
+    background: #ffffff;
+    border: 1px solid var(--gestar-card-border);
+    color: var(--gestar-text);
+}
+
+.fi-header-actions .fi-btn-color-primary.fi-btn-outlined {
+    background: #ffffff;
+    border: 1px solid var(--gestar-primary);
+    color: var(--gestar-primary);
+}
+
+/* ------------------------------------------------------------------ */
+/* Cards                                                                */
+/* ------------------------------------------------------------------ */
+.fi-section {
+    background: #ffffff;
+    border: 1px solid var(--gestar-card-border);
+    border-radius: 12px;
+    box-shadow: none !important;
+}
+
+.fi-section-content-ctn {
+    padding: 0;
+}
+
+.fi-section-header-heading {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: var(--gestar-card-title) !important;
+}
+
+.fi-fo-field-wrp-label,
+.fi-input-wrp-label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--gestar-text) !important;
+}
+
+.fi-input,
+.fi-select-input,
+.fi-textarea {
+    font-size: 12px !important;
+    color: var(--gestar-text) !important;
+    border-color: var(--gestar-card-border) !important;
+}
+
+.fi-input::placeholder,
+.fi-textarea::placeholder {
+    color: var(--gestar-placeholder) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card 5 - Estratificacao de risco em caixas grandes                  */
+/* ------------------------------------------------------------------ */
+.card-risco .fi-fo-radio {
+    flex-direction: column !important;
+    gap: 8px !important;
+    -mt-4: unset;
+}
+
+.card-risco .fi-fo-radio > div {
+    border: 1px solid var(--gestar-card-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    background: #ffffff;
+    margin-top: 0 !important;
+    padding-top: 12px !important;
+}
+
+.card-risco .fi-fo-radio > div:has(input:checked) {
+    border-color: var(--gestar-primary);
+    background: var(--gestar-active-bg);
+}
+
+.card-risco .fi-fo-radio > div label.flex {
+    align-items: flex-start;
+}
+
+.card-risco .fi-fo-radio span.font-medium {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: var(--gestar-text) !important;
+}
+
+.card-risco .fi-fo-radio p {
+    font-size: 12px !important;
+    color: var(--gestar-muted) !important;
+    margin-top: 2px !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card 3 - Habitos de vida (ToggleButtons grouped)                    */
+/* ------------------------------------------------------------------ */
+.card-habitos.fi-section {
+    max-width: 100%;
+}
+
+.card-habitos .fi-section-content {
+    min-width: 0;
+}
+
+.card-habitos .fi-fo-field-wrp,
+.card-habitos .fi-fo-component-ctn {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.card-habitos .fi-btn-group {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    grid-auto-columns: minmax(0, 1fr) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.card-habitos .fi-btn-group .fi-btn {
+    justify-content: center !important;
+    text-align: center;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    height: 36px;
+    min-width: 0;
+    padding: 0 6px !important;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+@media (max-width: 420px) {
+    .card-habitos .fi-btn-group .fi-btn {
+        white-space: normal;
+        overflow-wrap: anywhere;
+        height: auto;
+        min-height: 36px;
+        padding: 6px 4px !important;
+    }
+
+    .card-habitos .fi-btn-group {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Espacamento entre Tabagismo e Alcool */
+.card-habitos .fi-fo-component-ctn + .fi-fo-component-ctn {
+    margin-top: 16px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card 6 - Vacinas (linha checkbox + label + select)                  */
+/* ------------------------------------------------------------------ */
+.card-vacinas.fi-section {
+    max-width: 100%;
+}
+
+.card-vacinas .fi-section-content {
+    min-width: 0;
+}
+
+.card-vacinas .fi-fo-component-ctn {
+    min-width: 0;
+}
+
+.gestar-vacina-row {
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 6px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.gestar-vacina-row > div {
+    min-width: 0;
+}
+
+.gestar-vacina-row .fi-fo-field-wrp {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.gestar-vacina-row .fi-fo-select,
+.gestar-vacina-row .fi-input-wrp {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.gestar-vacina-row .choices {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.gestar-vacina-row .fi-fo-checkbox {
+    min-width: 0;
+}
+
+.gestar-vacina-row .fi-fo-checkbox label,
+.gestar-vacina-label {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: var(--gestar-text) !important;
+}
+
+.gestar-vacina-row .fi-fo-checkbox label {
+    overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card 7 - tabela exames por trimestre                                */
+/* ------------------------------------------------------------------ */
+.gestar-exames-content {
+    display: grid;
+    grid-template-columns: 1fr 170px;
+    gap: 18px;
+    align-items: flex-start;
+}
+
+.gestar-exames-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.gestar-exames-table th,
+.gestar-exames-table td {
+    padding: 6px 4px;
+    text-align: left;
+    color: var(--gestar-text);
+}
+
+.gestar-exames-table th:not(:first-child),
+.gestar-exames-table td:not(:first-child) {
+    text-align: center;
+}
+
+.gestar-exames-table thead th {
+    font-weight: 600;
+    border-bottom: 1px solid var(--gestar-card-border-light);
+}
+
+/* ------------------------------------------------------------------ */
+/* Card 10 - anotacoes do gestor                                       */
+/* ------------------------------------------------------------------ */
+.card-anotacoes.fi-section {
+    max-width: 100%;
+}
+
+.card-anotacoes .fi-section-content,
+.card-anotacoes .fi-fo-component-ctn {
+    min-width: 0;
+}
+
+.gestar-anot-row {
+    align-items: center !important;
+    gap: 10px !important;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.gestar-anot-row > div {
+    min-width: 0;
+}
+
+.gestar-anot-row .fi-fo-field-wrp {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.gestar-anot-row .fi-input-wrp,
+.gestar-anot-row textarea {
+    max-width: 100%;
+}
+
+.gestar-anot-row .fi-fo-checkbox {
+    min-width: 0;
+}
+
+.gestar-anot-row .fi-fo-checkbox label {
+    overflow-wrap: anywhere;
+}
+
+.gestar-anot-label {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: var(--gestar-text) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card 11 - grafico                                                   */
+/* ------------------------------------------------------------------ */
+.gestar-chart-wrapper {
+    width: 100%;
+    height: 240px;
+}
+
+/* Esconde o heading interno duplicado do widget de grafico */
+.card-grafico .fi-wi-chart .fi-section-header-heading {
+    display: none !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Rodape informativo                                                  */
+/* ------------------------------------------------------------------ */
+.gestar-page-footer {
+    margin-top: 24px;
+    color: var(--gestar-muted);
+    font-size: 11px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.gestar-page-footer span + span::before {
+    content: '|';
+    margin-right: 16px;
+    color: var(--gestar-card-border);
+}
+
+/* ------------------------------------------------------------------ */
+/* Brand sidebar custom                                                */
+/* ------------------------------------------------------------------ */
+.gestar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gestar-card-border-light);
+}
+
+.gestar-brand-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--gestar-primary);
+}
+
+.gestar-brand-text {
+    line-height: 1.05;
+}
+
+.gestar-brand-text strong {
+    display: block;
+    color: var(--gestar-primary);
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+.gestar-brand-text span {
+    display: block;
+    color: var(--gestar-card-title);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}

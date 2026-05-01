@@ -17,6 +17,7 @@ class PressaoArterialChart extends ChartWidget
     protected int | string | array $columnSpan = 'full';
 
     public ?Atendimento $record = null;
+    public ?int $gestante_id = null;
 
     /** @var array<string, mixed> */
     protected static ?array $options = [
@@ -97,6 +98,10 @@ class PressaoArterialChart extends ChartWidget
 
     protected function resolveGestante(): ?Gestante
     {
+        if ($this->gestante_id) {
+            return Gestante::find($this->gestante_id);
+        }
+        
         return $this->record?->gestante;
     }
 }

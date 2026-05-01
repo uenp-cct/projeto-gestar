@@ -25,9 +25,22 @@ class GestanteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationLabel = 'Gestantes';
-    protected static ?string $navigationGroup = 'Gestão';
-    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationLabel = 'Pacientes';
+    protected static ?string $modelLabel = 'Paciente';
+    protected static ?string $pluralModelLabel = 'Pacientes';
+    protected static ?int $navigationSort = 2;
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['nome', 'numero_sus'];
+    }
+
+    public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
+    {
+        return [
+            'SUS' => $record->numero_sus ?: '—',
+        ];
+    }
 
     public static function form(Form $form): Form
     {
@@ -145,7 +158,7 @@ class GestanteResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('atendimento')
                     ->label('Novo atendimento')
-                    ->icon('heroicon-o-clipboard-document-plus')
+                    ->icon('heroicon-o-document-plus')
                     ->url(fn (Gestante $record): string => AtendimentoResource::getUrl('create', [
                         'tableFilters[gestante_id][value]' => $record->id,
                     ])),

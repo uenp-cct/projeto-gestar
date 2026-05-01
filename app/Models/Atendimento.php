@@ -30,11 +30,20 @@ class Atendimento extends Model
         self::TIPO_OUTRO => 'Outro',
     ];
 
+    public const STATUS_RASCUNHO = 'rascunho';
+    public const STATUS_FINALIZADO = 'finalizado';
+
+    public const STATUSES = [
+        self::STATUS_RASCUNHO => 'Rascunho',
+        self::STATUS_FINALIZADO => 'Finalizado',
+    ];
+
     protected $fillable = [
         'gestante_id',
         'user_id',
         'data_atendimento',
         'tipo_atendimento',
+        'status',
 
         'estratificacao_risco',
         'estratificacao_observacao',

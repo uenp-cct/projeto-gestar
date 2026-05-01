@@ -12,7 +12,7 @@ class CreateGestante extends CreateRecord
 
     public function getTitle(): string
     {
-        return 'Cadastrar nova gestante';
+        return 'Cadastrar nova paciente';
     }
 
     protected function getFormActions(): array

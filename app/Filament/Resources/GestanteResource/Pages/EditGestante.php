@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\GestanteResource\Pages;
 
 use App\Filament\Resources\GestanteResource;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditGestante extends EditRecord
@@ -11,7 +12,14 @@ class EditGestante extends EditRecord
 
     public function getTitle(): string
     {
-        return 'Editar cadastro da gestante';
+        return 'Editar paciente';
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            DeleteAction::make()->label('Excluir'),
+        ];
     }
 
     protected function getFormActions(): array
@@ -19,7 +27,6 @@ class EditGestante extends EditRecord
         return [
             $this->getSaveFormAction()->label('Salvar alterações'),
             $this->getCancelFormAction()->label('Cancelar'),
-            $this->getDeleteFormAction()->label('Excluir'),
         ];
     }
 }
