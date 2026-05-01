@@ -1,0 +1,17 @@
+schema: spec-driven
+
+context: |
+  Tech stack: PHP 8.2, Laravel 12, Filament v3, Vue.js, Vite.
+  Domain: Health/Social management (Gestar), specifically for managing "Gestantes" (pregnant women).
+  Database: SQLite (default dev).
+  Localization: pt-BR.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours

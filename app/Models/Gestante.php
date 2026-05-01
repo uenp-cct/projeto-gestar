@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Gestante extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         // I - Dados Cadastrais
-        'nome', 'data_nascimento', 'endereco', 'numero', 'bairro', 'fone', 'email',
+        'nome', 'numero_sus', 'gestor_id', 'medico_id',
+        'data_nascimento', 'endereco', 'numero', 'bairro', 'fone', 'email',
 
         // II - Dados Sociodemográficos
         'idade', 'cor', 'estado_conjugal', 'numero_filhos', 'escolaridade',
@@ -64,4 +70,19 @@ class Gestante extends Model
         'problemas_saude_pessoais' => 'array',
         'problemas_saude_familia' => 'array',
     ];
+
+    public function atendimentos(): HasMany
+    {
+        return $this->hasMany(Atendimento::class)->orderByDesc('data_atendimento');
+    }
+
+    public function gestor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'gestor_id');
+    }
+
+    public function medico(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'medico_id');
+    }
 }

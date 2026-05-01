@@ -3,21 +3,21 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\GestanteResource\Pages;
+use App\Models\Atendimento;
 use App\Models\Gestante;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use Filament\Forms\Components\{
-    TextInput,
-    DatePicker,
-    Textarea,
-    Toggle,
-    Select,
-    Section
-};
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class GestanteResource extends Resource
 {
@@ -27,115 +27,128 @@ class GestanteResource extends Resource
 
     protected static ?string $navigationLabel = 'Gestantes';
     protected static ?string $navigationGroup = 'Gestão';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form->schema([
 
-                Section::make('Dados Cadastrais')->schema([
-                    TextInput::make('nome')->label('Nome completo')->required(),
+            Section::make('Identificação')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('nome')->label('Nome completo')->required()->columnSpan(2),
+                    TextInput::make('numero_sus')->label('Cartão SUS')->maxLength(20),
                     DatePicker::make('data_nascimento')->label('Data de nascimento'),
+                    Select::make('gestor_id')
+                        ->label('Gestor(a)')
+                        ->relationship('gestor', 'name')
+                        ->searchable()
+                        ->preload(),
+                    Select::make('medico_id')
+                        ->label('Médico(a)')
+                        ->relationship('medico', 'name')
+                        ->searchable()
+                        ->preload(),
+                ]),
+
+            Section::make('Contato e endereço')
+                ->columns(2)
+                ->collapsed()
+                ->schema([
                     TextInput::make('endereco')->label('Endereço'),
                     TextInput::make('numero')->label('Número'),
                     TextInput::make('bairro')->label('Bairro'),
                     TextInput::make('fone')->label('Telefone'),
-                    TextInput::make('email')->label('E-mail')->email(),
+                    TextInput::make('email')->label('E-mail')->email()->columnSpan(2),
                 ]),
 
-                Section::make('Vacinas')->schema([
-                    TextInput::make('vacina_dt_dose1')->label('DT - Dose única'),
-                    TextInput::make('vacina_dt_dose2')->label('DT - 1ª dose'),
-                    TextInput::make('vacina_dt_dose3')->label('DT - 2ª dose'),
-                    TextInput::make('vacina_dt_ref')->label('DT - Reforço'),
-
-                    TextInput::make('vacina_hep_b_dose1')->label('Hepatite B - Dose única'),
-                    TextInput::make('vacina_hep_b_dose2')->label('Hepatite B - 1ª dose'),
-                    TextInput::make('vacina_hep_b_dose3')->label('Hepatite B - 2ª dose'),
-                    TextInput::make('vacina_hep_b_ref')->label('Hepatite B - Reforço'),
-
-                    TextInput::make('vacina_dtpa_dose')->label('DTPa - Dose aplicada'),
-                    TextInput::make('vacina_influenza')->label('Influenza - Dose aplicada'),
+            Section::make('Antecedentes pessoais e familiares')
+                ->collapsed()
+                ->schema([
+                    Forms\Components\CheckboxList::make('problemas_saude_pessoais')
+                        ->label('Problemas de saúde pessoais')
+                        ->options([
+                            'hipertensao' => 'Hipertensão',
+                            'diabetes' => 'Diabetes',
+                            'cardiopatia' => 'Cardiopatia',
+                            'doenca_renal' => 'Doença renal',
+                            'tireoide' => 'Tireoide',
+                            'outras' => 'Outras',
+                        ])
+                        ->columns(2),
+                    Toggle::make('alergia')->label('Possui alergia?'),
+                    TextInput::make('alergia_qual')->label('Quais alergias?')->visible(fn ($get) => $get('alergia')),
+                    Toggle::make('medicamento_diario')->label('Usa medicamento diário?'),
+                    TextInput::make('medicamento_qual')->label('Qual?')->visible(fn ($get) => $get('medicamento_diario')),
+                    Forms\Components\CheckboxList::make('problemas_saude_familia')
+                        ->label('Problemas de saúde na família')
+                        ->options([
+                            'hipertensao' => 'Hipertensão',
+                            'diabetes' => 'Diabetes',
+                            'cardiopatia' => 'Cardiopatia',
+                            'cancer' => 'Câncer',
+                            'outras' => 'Outras',
+                        ])
+                        ->columns(2),
                 ]),
 
-                Section::make('Exames Laboratoriais')->schema([
-                    Textarea::make('exames_trim1')->label('Exames - 1º Trimestre'),
-                    Textarea::make('exames_trim2')->label('Exames - 2º Trimestre'),
-                    Textarea::make('exames_trim3')->label('Exames - 3º Trimestre'),
+            Section::make('Histórico ginecológico e obstétrico')
+                ->columns(2)
+                ->collapsed()
+                ->schema([
+                    TextInput::make('numero_gestacoes')->label('Número de gestações')->numeric(),
+                    TextInput::make('partos_normal')->label('Partos normais')->numeric(),
+                    TextInput::make('partos_cesaria')->label('Partos cesárea')->numeric(),
+                    TextInput::make('numero_abortos')->label('Abortos')->numeric(),
+                    Textarea::make('qual_intercorrencia_gestacao')->label('Intercorrências em gestações anteriores')->columnSpanFull(),
                 ]),
 
-
-                Section::make('Ultrassonografias')->schema([
-                    Textarea::make('usg1')->label('1ª USG - Detalhes'),
-                    Textarea::make('usg2')->label('2ª USG - Detalhes'),
-                    Textarea::make('usg3')->label('3ª USG - Detalhes'),
+            Section::make('Gestação atual')
+                ->columns(2)
+                ->collapsed()
+                ->schema([
+                    DatePicker::make('dum')->label('DUM'),
+                    DatePicker::make('dpp_dum')->label('DPP (DUM)'),
+                    DatePicker::make('dpp_usg')->label('DPP (USG)'),
+                    Toggle::make('gestacao_planejada')->label('Gestação planejada?'),
+                    Select::make('estratificacao_risco')
+                        ->label('Estratificação de risco inicial')
+                        ->options(Atendimento::RISCOS),
+                    Textarea::make('condicao_risco')->label('Condições/observações de risco')->columnSpanFull(),
+                    Textarea::make('sinais_sintomas')->label('Sinais e sintomas relevantes')->columnSpanFull(),
                 ]),
-
-                Section::make('Exames Físicos - Pré-natal')->schema([
-                    Textarea::make('consultas_prenatal')->label('Consultas (dados físicos, AU, PA, BCF etc.)'),
-                ]),
-
-                Section::make('Exames Físicos - Pré-natal')->schema([
-                    Textarea::make('consultas_prenatal')->label('Consultas (dados físicos, AU, PA, BCF etc.)'),
-                ]),
-
-                Section::make('Parto e RN')->schema([
-                    DatePicker::make('data_nascimento_rn')->label('Nascimento do RN'),
-                    Select::make('tipo_parto')->label('Tipo de parto')->options([
-                        1 => 'Cesárea', 2 => 'Vaginal'
-                    ]),
-                    TextInput::make('apgar_1')->label('Apgar - 1º min'),
-                    TextInput::make('apgar_5')->label('Apgar - 5º min'),
-                    TextInput::make('peso_rn')->label('Peso (g)'),
-                    TextInput::make('comprimento_rn')->label('Comprimento (cm)'),
-                    TextInput::make('perimetro_cefalico')->label('Perímetro cefálico'),
-                    Toggle::make('anomalias')->label('Anomalias congênitas?'),
-                    TextInput::make('anomalias_descricao')->label('Descrição')->visible(fn($get) => $get('anomalias')),
-                    Toggle::make('aleitamento_maternidade')->label('Aleitamento na maternidade'),
-                    Select::make('desfecho_parto')->label('Desfecho')->options([
-                        1 => 'Satisfatório', 2 => 'Insatisfatório'
-                    ]),
-                    Textarea::make('observacoes_parto')->label('Observações adicionais'),
-                ]),
-
-                Section::make('1ª Semana do RN')->schema([
-                    TextInput::make('nome_crianca')->label('Nome da criança'),
-                    TextInput::make('peso_rn_semana1')->label('Peso'),
-                    Toggle::make('aleitamento_exclusivo_semana1')->label('Aleitamento exclusivo?'),
-                    Textarea::make('consulta_semana1')->label('Consulta - Observações'),
-                ]),
-
-                Section::make('Período Neonatal')->schema([
-                    DatePicker::make('data_visita_neonatal')->label('Data da consulta/visita'),
-                    TextInput::make('idade_crianca_dias')->label('Idade da criança (dias)'),
-                    TextInput::make('peso_neonatal')->label('Peso (g)'),
-                    TextInput::make('comprimento_neonatal')->label('Comprimento (cm)'),
-                    Toggle::make('aleitamento_exclusivo_neonatal')->label('Aleitamento exclusivo?'),
-                    Textarea::make('intercorrencias_neonatal')->label('Intercorrências'),
-                    Textarea::make('consulta_neonatal')->label('Observações da consulta'),
-                    Select::make('desfecho_neonatal')->label('Desfecho')->options([
-                        1 => 'Satisfatório', 2 => 'Insatisfatório'
-                    ]),
-                ]),
-
-                Section::make('Anotações e Plano de Cuidados')->schema([
-                Textarea::make('anotacoes_consultas')->label('Anotações das consultas'),
-                Textarea::make('anotacoes_visitas')->label('Visitas domiciliares e contatos'),
-                Textarea::make('acoes_educativas')->label('Ações educativas'),
-                Textarea::make('plano_cuidado')->label('Plano de cuidado'),
-            ]),
         ]);
-        }
+    }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('nome')->label('Nome')->searchable()->sortable(),
-                TextColumn::make('data_nascimento')->label('Nascimento')->date(),
-                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i'),
+                TextColumn::make('numero_sus')->label('SUS')->searchable()->toggleable(),
+                TextColumn::make('data_nascimento')->label('Nascimento')->date('d/m/Y')->sortable(),
+                TextColumn::make('gestor.name')->label('Gestor(a)')->toggleable(),
+                BadgeColumn::make('estratificacao_risco')
+                    ->label('Risco inicial')
+                    ->formatStateUsing(fn ($state) => Atendimento::RISCOS[$state] ?? '—')
+                    ->colors([
+                        'success' => Atendimento::RISCO_HABITUAL,
+                        'warning' => Atendimento::RISCO_INTERMEDIARIO,
+                        'danger' => Atendimento::RISCO_ALTO,
+                    ]),
+                TextColumn::make('atendimentos_count')
+                    ->counts('atendimentos')
+                    ->label('Atendimentos'),
+                TextColumn::make('created_at')->label('Cadastrado em')->dateTime('d/m/Y H:i')->toggleable(isToggledHiddenByDefault: true),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('atendimento')
+                    ->label('Novo atendimento')
+                    ->icon('heroicon-o-clipboard-document-plus')
+                    ->url(fn (Gestante $record): string => AtendimentoResource::getUrl('create', [
+                        'tableFilters[gestante_id][value]' => $record->id,
+                    ])),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
