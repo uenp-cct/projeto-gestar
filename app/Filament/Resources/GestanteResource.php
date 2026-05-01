@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\GestanteResource\Pages;
+use App\Filament\Resources\GestanteResource\Pages\ViewGestante;
 use App\Models\Atendimento;
 use App\Models\Gestante;
 use Filament\Forms;
@@ -137,7 +138,13 @@ class GestanteResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nome')->label('Nome')->searchable()->sortable(),
+                TextColumn::make('nome')
+                    ->label('Nome')
+                    ->searchable()
+                    ->sortable()
+                    ->url(fn ($record) => ViewGestante::getUrl(['record' => $record]))
+                    ->color('primary')
+                    ->weight('bold'),
                 TextColumn::make('numero_sus')->label('SUS')->searchable()->toggleable(),
                 TextColumn::make('data_nascimento')->label('Nascimento')->date('d/m/Y')->sortable(),
                 TextColumn::make('gestor.name')->label('Gestor(a)')->toggleable(),
@@ -178,6 +185,7 @@ class GestanteResource extends Resource
         return [
             'index' => Pages\ListGestantes::route('/'),
             'create' => Pages\CreateGestante::route('/create'),
+            'view' => Pages\ViewGestante::route('/{record}'),
             'edit' => Pages\EditGestante::route('/{record}/edit'),
         ];
     }

@@ -155,6 +155,7 @@ class AtendimentoResource extends Resource
                     ->options(Atendimento::STATUSES),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()->label('Ver'),
                 Tables\Actions\EditAction::make()->label('Abrir'),
             ])
             ->bulkActions([
@@ -186,6 +187,7 @@ class AtendimentoResource extends Resource
         return [
             'index' => Pages\ListAtendimentos::route('/'),
             'create' => Pages\CreateAtendimento::route('/create'),
+            'view' => Pages\ViewAtendimento::route('/{record}'),
             'edit' => Pages\EditAtendimento::route('/{record}/edit'),
         ];
     }

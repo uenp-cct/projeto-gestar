@@ -531,7 +531,21 @@ body,
 /* ------------------------------------------------------------------ */
 .gestar-chart-wrapper {
     width: 100%;
-    height: 240px;
+    height: auto;
+    min-height: 200px;
+    overflow: visible;
+}
+
+.gestar-chart-wrapper-hub {
+    width: 100%;
+    height: auto;
+    min-height: 260px;
+    overflow: visible;
+}
+
+/* Garante que o container do section nao corte o canvas do Chart.js */
+.card-grafico .fi-section-content {
+    overflow: visible !important;
 }
 
 /* Esconde o heading interno duplicado do widget de grafico */
@@ -555,6 +569,207 @@ body,
     content: '|';
     margin-right: 16px;
     color: var(--gestar-card-border);
+}
+
+/* ------------------------------------------------------------------ */
+/* Hub paciente - Timeline                                             */
+/* ------------------------------------------------------------------ */
+.gestar-timeline {
+    padding: 8px 0;
+}
+
+.gestar-timeline-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gestar-card-title);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gestar-card-border-light);
+}
+
+.gestar-timeline-list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-left: 20px; /* Space for the rail */
+}
+
+/* Timeline rail (vertical line) */
+.gestar-timeline-list::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 7px; /* Position the line */
+    width: 2px;
+    background-color: var(--gestar-card-border-light);
+    border-radius: 1px;
+}
+
+.gestar-timeline-item {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid var(--gestar-card-border);
+    border-radius: 12px;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.gestar-timeline-item:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+/* Timeline dot */
+.gestar-timeline-dot {
+    position: absolute;
+    top: 24px; /* Align with header roughly */
+    left: -20px; /* Pull it back over the rail */
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 3px solid var(--gestar-card-border); /* Default color, overridden by modifiers */
+    z-index: 1;
+    transform: translateX(-50%); /* Center on the rail */
+}
+
+/* Modificadores de Risco */
+.gestar-timeline-item--habitual { border-left: 4px solid #34d399; }
+.gestar-timeline-item--habitual .gestar-timeline-dot { border-color: #34d399; }
+
+.gestar-timeline-item--intermediario { border-left: 4px solid #facc15; }
+.gestar-timeline-item--intermediario .gestar-timeline-dot { border-color: #facc15; }
+
+.gestar-timeline-item--alto { border-left: 4px solid #f87171; }
+.gestar-timeline-item--alto .gestar-timeline-dot { border-color: #f87171; }
+
+.gestar-timeline-item--default { border-left: 4px solid var(--gestar-card-border); }
+.gestar-timeline-item--default .gestar-timeline-dot { border-color: var(--gestar-card-border); }
+
+.gestar-timeline-content {
+    padding: 20px;
+}
+
+.gestar-timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.gestar-timeline-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.gestar-timeline-id {
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--gestar-primary);
+}
+
+.gestar-timeline-date {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gestar-text);
+}
+
+.gestar-timeline-pa {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    background: var(--gestar-primary);
+    border-radius: 16px;
+    padding: 3px 12px;
+    letter-spacing: 0.5px;
+}
+
+.gestar-timeline-prof {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gestar-muted);
+    background: var(--gestar-bg);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--gestar-card-border-light);
+}
+
+.gestar-timeline-body {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--gestar-card-border-light);
+}
+
+.gestar-timeline-body--empty {
+    padding-top: 12px;
+}
+
+.gestar-timeline-dl {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .gestar-timeline-dl {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+.gestar-timeline-obs {
+    background: var(--gestar-bg);
+    border: 1px solid var(--gestar-card-border-light);
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+
+.gestar-timeline-obs-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gestar-muted);
+    margin-bottom: 6px;
+}
+
+.gestar-timeline-obs-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--gestar-text);
+    margin: 0;
+    white-space: pre-wrap; /* Preserve line breaks from textareas */
+}
+
+/* ------------------------------------------------------------------ */
+/* Hub paciente - Tabela de atendimentos                               */
+/* ------------------------------------------------------------------ */
+.gestar-atendimentos-table table {
+    border-collapse: collapse;
+}
+
+.gestar-atendimentos-table th {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gestar-atendimentos-table td {
+    font-size: 13px;
+}
+
+.gestar-atendimentos-table a:hover {
+    background: var(--gestar-primary) !important;
+    color: #ffffff !important;
 }
 
 /* ------------------------------------------------------------------ */

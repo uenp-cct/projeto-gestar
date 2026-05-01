@@ -12,7 +12,7 @@ class PressaoArterialChart extends ChartWidget
 {
     protected static ?string $heading = '11. Gráfico — Evolução da PA (mmHg)';
 
-    protected static ?string $maxHeight = '260px';
+    protected static ?string $maxHeight = '340px';
 
     protected int | string | array $columnSpan = 'full';
 
@@ -31,6 +31,11 @@ class PressaoArterialChart extends ChartWidget
                 'beginAtZero' => false,
                 'suggestedMin' => 60,
                 'suggestedMax' => 180,
+            ],
+        ],
+        'layout' => [
+            'padding' => [
+                'bottom' => 8,
             ],
         ],
     ];
