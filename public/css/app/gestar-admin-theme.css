@@ -778,33 +778,15 @@ body,
 .gestar-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px 20px;
+    padding: 14px 18px;
     border-bottom: 1px solid var(--gestar-card-border-light);
 }
 
-.gestar-brand-icon {
-    width: 32px;
-    height: 32px;
-    color: var(--gestar-primary);
-}
-
-.gestar-brand-text {
-    line-height: 1.05;
-}
-
-.gestar-brand-text strong {
+.gestar-brand-logo {
     display: block;
-    color: var(--gestar-primary);
-    font-weight: 800;
-    font-size: 16px;
-    letter-spacing: 0.5px;
-}
-
-.gestar-brand-text span {
-    display: block;
-    color: var(--gestar-card-title);
-    font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    width: min(100%, 214px);
+    height: auto;
+    max-height: 58px;
+    object-fit: contain;
+    object-position: left center;
 }
